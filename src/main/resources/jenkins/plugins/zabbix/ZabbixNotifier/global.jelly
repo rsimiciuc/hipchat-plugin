@@ -1,0 +1,10 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+    <f:section title="${%Global Zabbix Notifier Settings}">
+        <f:entry title="${%Zabbix Server}" help="${rootURL}/plugin/zabbix/help-globalConfig-zabbixServer.html">
+            <f:textbox name="zabbix.server" default="localhost" value="${descriptor.server}" />
+        </f:entry>
+        <f:entry title="${%Monitored Server}" help="${rootURL}/plugin/zabbix/help-globalConfig-zabbixHost.html">
+            <f:textbox name="zabbix.host" default="jenkins" value="${descriptor.host}" />
+        </f:entry>
+    </f:section>
+</j:jelly>

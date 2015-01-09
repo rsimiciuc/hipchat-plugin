@@ -5,16 +5,16 @@
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>plugin</artifactId>
-        <version>1.447</version>
+        <version>1.590</version>
     </parent>
 
-    <groupId>org.jvnet.hudson.plugins</groupId>
-    <artifactId>hipchat</artifactId>
+    <groupId>org.hudson.plugins</groupId>
+    <artifactId>zabbix</artifactId>
     <packaging>hpi</packaging>
-    <version>0.1.9-SNAPSHOT</version>
-    <name>Jenkins HipChat Plugin</name>
-    <description>A Build status publisher that notifies channels on a HipChat server</description>
-    <url>http://wiki.jenkins-ci.org/display/JENKINS/HipChat+Plugin</url>
+    <version>0.1.0-SNAPSHOT</version>
+    <name>Jenkins Zabbix Plugin</name>
+    <description>A Build status publisher that notifies zabbix</description>
+    <url>http://wiki.jenkins-ci.org/display/JENKINS/Zabbix+Plugin</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -36,18 +36,13 @@
     </distributionManagement>
 
     <scm>
-        <connection>scm:git:ssh://github.com/jenkinsci/hipchat-plugin.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/jenkinsci/hipchat-plugin.git</developerConnection>
+        <connection>scm:git:ssh://github.com/rsimiciuc/zabbix-plugin.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/rsimiciuc/zabbix-plugin.git</developerConnection>
         <url>https://github.com/jenkinsci/hipchat-plugin</url>
     </scm>
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>commons-httpclient</groupId>
-                <artifactId>commons-httpclient</artifactId>
-                <version>3.1</version>
-            </dependency>
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
@@ -69,10 +64,6 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
-        <dependency>
-            <groupId>commons-httpclient</groupId>
-            <artifactId>commons-httpclient</artifactId>
-        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

@@ -1,4 +1,4 @@
-package jenkins.plugins.hipchat;
+package jenkins.plugins.zabbix;
 
 import hudson.Extension;
 import hudson.model.AbstractProject;
@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jenkins.model.Jenkins;
-import jenkins.plugins.hipchat.HipChatNotifier.HipChatJobProperty;
+import jenkins.plugins.zabbix.ZabbixNotifier.ZabbixJobProperty;
 
 @Extension
 public class ConfigurationMigrator extends ItemListener {
@@ -17,11 +17,10 @@ public class ConfigurationMigrator extends ItemListener {
     @Override
     public void onLoaded() {
         for (AbstractProject<?, ?> item : Jenkins.getInstance().getAllItems(AbstractProject.class)) {
-            HipChatJobProperty property = item.getProperty(HipChatJobProperty.class);
+            ZabbixJobProperty property = item.getProperty(ZabbixJobProperty.class);
             if (property != null) {
-                HipChatNotifier notifier = item.getPublishersList().get(HipChatNotifier.class);
+                ZabbixNotifier notifier = item.getPublishersList().get(ZabbixNotifier.class);
                 if (notifier != null) {
-                    notifier.setRoom(property.getRoom());
                     notifier.setNotifyAborted(property.getNotifyAborted());
                     notifier.setNotifyBackToNormal(property.getNotifyBackToNormal());
                     notifier.setNotifyFailure(property.getNotifyFailure());
@@ -30,7 +29,7 @@ public class ConfigurationMigrator extends ItemListener {
                     notifier.setNotifyUnstable(property.getNotifyUnstable());
                 }
                 try {
-                    item.removeProperty(HipChatJobProperty.class);
+                    item.removeProperty(ZabbixJobProperty.class);
                 } catch (IOException ioe) {
                     LOGGER.log(Level.WARNING, "An error occurred while trying to update job configuration for "
                             + item.getName(), ioe);

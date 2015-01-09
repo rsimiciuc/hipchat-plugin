@@ -1,4 +1,4 @@
-package jenkins.plugins.hipchat;
+package jenkins.plugins.zabbix;
 
 import hudson.model.AbstractBuild;
 
