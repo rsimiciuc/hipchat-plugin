@@ -3,6 +3,7 @@ package jenkins.plugins.zabbix;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.Result;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @SuppressWarnings("rawtypes")
@@ -22,21 +23,32 @@ public class ActiveNotifier implements FineGrainedNotifier {
     }
 
     public void deleted(AbstractBuild r) {
+        logger.log(Level.INFO, "deleted");
     }
 
     public void started(AbstractBuild build) {
-        /** do nothing **/
+        /**
+         * do nothing *
+         */
+        logger.log(Level.INFO, "started");
     }
 
     private void notifyStart(AbstractBuild build, String message) {
-        /** do nothing **/
+        /**
+         * do nothing *
+         */
+        logger.log(Level.INFO, "start");
     }
 
     public void finalized(AbstractBuild r) {
-        /** do nothing **/
+        logger.log(Level.INFO, "finalized");
+        /**
+         * do nothing *
+         */
     }
 
     public void completed(AbstractBuild r) {
+        logger.log(Level.INFO, "completed");
         AbstractProject<?, ?> project = r.getProject();
         Result result = r.getResult();
         AbstractBuild<?, ?> previousBuild = project.getLastBuild().getPreviousBuild();
@@ -49,6 +61,7 @@ public class ActiveNotifier implements FineGrainedNotifier {
                 || (result == Result.UNSTABLE && notifier.isNotifyUnstable())) {
             getZabbix(r).publish(getJobName(r), getResultCode(result));
         }
+        //getZabbix(r).publish(getJobName(r), getResultCode(result));
     }
 
     static Integer getResultCode(Result result) {

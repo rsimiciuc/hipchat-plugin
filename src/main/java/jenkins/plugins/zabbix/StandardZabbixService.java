@@ -27,10 +27,12 @@ public class StandardZabbixService implements ZabbixService {
     }
 
     public void publish(String jobName, Integer status) {
-        logger.log(Level.INFO, "Posting: {0} -> {1} for {1} to {2}", new Object[]{jobName, status.toString(), getHost(), getServer()});
+        logger.log(Level.INFO, "Posting: {0} -> {1} for {2} to {3}", new Object[]{jobName, status.toString(), getHost(), getServer()});
 
         try {
-            Process p = Runtime.getRuntime().exec("zabbix_sender -z " + getServer() + " -s \"" + getHost() + "\" -k \"" + jobName + "\" -o " + status.toString());
+            String cmd = "zabbix_sender -z " + getServer() + " -s " + getHost() + " -k " + jobName + " -o " + status.toString();
+            logger.log(Level.INFO, "Running{0}", cmd);
+            Process p = Runtime.getRuntime().exec(cmd);
             BufferedReader in = new BufferedReader(
                                 new InputStreamReader(p.getInputStream()));
             String output = "";
