@@ -7,6 +7,9 @@ import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
 import hudson.model.Job;
 import hudson.model.JobPropertyDescriptor;
+import hudson.model.Run;
+import hudson.model.TaskListener;
+import hudson.model.listeners.RunListener;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Notifier;
@@ -32,7 +35,7 @@ public class ZabbixNotifier extends Notifier {
     private boolean notifyBackToNormal;
 
     @DataBoundConstructor
-    public ZabbixNotifier( boolean notifySuccess, boolean notifyAborted,
+    public ZabbixNotifier(boolean notifySuccess, boolean notifyAborted,
             boolean notifyNotBuilt, boolean notifyUnstable, boolean notifyFailure, boolean notifyBackToNormal) {
         this.notifySuccess = notifySuccess;
         this.notifyAborted = notifyAborted;
@@ -129,6 +132,46 @@ public class ZabbixNotifier extends Notifier {
         return true;
     }
 
+    /**
+     *
+     * @author raul
+     */
+    @Extension
+    @SuppressWarnings("rawtypes")
+    public static class RunListenerImplementation extends RunListener<Run> {
+
+        private static final Logger logger = Logger.getLogger(RunListenerImplementation.class.getName());
+
+        public RunListenerImplementation() {
+            super(Run.class);
+        }
+
+        @Override
+        public void onStarted(Run r, TaskListener listener) {
+            logger.info("Main Job Started");
+        }
+
+        @Override
+        public void onCompleted(Run r, TaskListener listener) {
+            logger.info("Main Job Completed");
+        }
+
+        @Override
+        public void onFinalized(Run r) {
+
+            if (r.getParent() instanceof hudson.matrix.MatrixProject) {
+
+                DescriptorImpl desc = Jenkins.getInstance().getDescriptorByType(DescriptorImpl.class);
+                ZabbixService zabbix = new StandardZabbixService(desc.getServer(), desc.getHost());
+
+                zabbix.publish(r.getParent().getDisplayName(), ActiveNotifier.getResultCode(r.getParent().getLastBuild().getResult()));
+            } else {
+                logger.info("class not matching: " + r.getParent().getClass().toString());
+            }
+        }
+
+    }
+
     @Extension
     public static class DescriptorImpl extends BuildStepDescriptor<Publisher> {
 
@@ -174,14 +217,16 @@ public class ZabbixNotifier extends Notifier {
     }
 
     /**
-     * The settings defined here have been moved to the {@link ZabbixNotifier} configuration (shows up under the Post
-     * Build task view).
+     * The settings defined here have been moved to the {@link ZabbixNotifier}
+     * configuration (shows up under the Post Build task view).
      *
-     * @deprecated The plugin configuration should be stored in {@link ZabbixNotifier}. This class only exists, so
-     * configurations can be migrated for the build jobs.
+     * @deprecated The plugin configuration should be stored in
+     * {@link ZabbixNotifier}. This class only exists, so configurations can be
+     * migrated for the build jobs.
      */
     @Deprecated
     public static class ZabbixJobProperty extends hudson.model.JobProperty<AbstractProject<?, ?>> {
+
         private final boolean notifySuccess;
         private final boolean notifyAborted;
         private final boolean notifyNotBuilt;
@@ -189,14 +234,13 @@ public class ZabbixNotifier extends Notifier {
         private final boolean notifyFailure;
         private final boolean notifyBackToNormal;
 
-
         @DataBoundConstructor
-        public ZabbixJobProperty( boolean notifyAborted,
-                                  boolean notifyFailure,
-                                  boolean notifyNotBuilt,
-                                  boolean notifySuccess,
-                                  boolean notifyUnstable,
-                                  boolean notifyBackToNormal) {
+        public ZabbixJobProperty(boolean notifyAborted,
+                boolean notifyFailure,
+                boolean notifyNotBuilt,
+                boolean notifySuccess,
+                boolean notifyUnstable,
+                boolean notifyBackToNormal) {
             this.notifyAborted = notifyAborted;
             this.notifyFailure = notifyFailure;
             this.notifyNotBuilt = notifyNotBuilt;
@@ -242,6 +286,7 @@ public class ZabbixNotifier extends Notifier {
 
         @Extension
         public static final class DescriptorImpl extends JobPropertyDescriptor {
+
             public String getDisplayName() {
                 return "Zabbix Notifications";
             }

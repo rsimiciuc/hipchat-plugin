@@ -11,7 +11,7 @@
     <groupId>org.hudson.plugins</groupId>
     <artifactId>zabbix</artifactId>
     <packaging>hpi</packaging>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.1-SNAPSHOT</version>
     <name>Jenkins Zabbix Plugin</name>
     <description>A Build status publisher that notifies zabbix</description>
     <url>http://wiki.jenkins-ci.org/display/JENKINS/Zabbix+Plugin</url>
@@ -67,6 +67,12 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jenkins-ci.main</groupId>
+            <artifactId>jenkins-core</artifactId>
+            <version>1.532.3</version>
+            <type>jar</type>
         </dependency>
     </dependencies>
 

@@ -48,7 +48,6 @@ public class ActiveNotifier implements FineGrainedNotifier {
     }
 
     public void completed(AbstractBuild r) {
-        logger.log(Level.INFO, "completed");
         AbstractProject<?, ?> project = r.getProject();
         Result result = r.getResult();
         AbstractBuild<?, ?> previousBuild = project.getLastBuild().getPreviousBuild();
